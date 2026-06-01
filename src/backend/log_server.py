@@ -17,6 +17,10 @@ def resource_root():
 
 def data_root():
     if getattr(sys, "frozen", False):
+        executable = Path(sys.executable).resolve()
+        app_bundle = next((parent for parent in executable.parents if parent.suffix == ".app"), None)
+        if app_bundle:
+            return app_bundle.parent / "data"
         return Path(sys.executable).parent / "data"
     return Path(__file__).resolve().parents[2] / "data"
 

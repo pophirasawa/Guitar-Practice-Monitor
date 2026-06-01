@@ -5,7 +5,8 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
-OUT = ROOT / "assets" / "app.ico"
+ICO_OUT = ROOT / "assets" / "app.ico"
+PNG_OUT = ROOT / "assets" / "app.png"
 SIZE = 256
 
 
@@ -57,12 +58,14 @@ def make_png(size):
 
 
 def main():
-    OUT.parent.mkdir(exist_ok=True)
+    ICO_OUT.parent.mkdir(exist_ok=True)
     png = make_png(SIZE)
     header = struct.pack("<HHH", 0, 1, 1)
     directory = struct.pack("<BBBBHHII", 0, 0, 0, 0, 1, 32, len(png), 6 + 16)
-    OUT.write_bytes(header + directory + png)
-    print(OUT)
+    ICO_OUT.write_bytes(header + directory + png)
+    PNG_OUT.write_bytes(png)
+    print(ICO_OUT)
+    print(PNG_OUT)
 
 
 if __name__ == "__main__":

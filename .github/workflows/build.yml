@@ -1,0 +1,140 @@
+name: Build Guitar Practice Monitor
+
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+jobs:
+  build-windows:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -r requirements.txt
+          python -m pip install pyinstaller
+
+      - name: Validate sources
+        run: |
+          python -m py_compile src\desktop\practice_float.py src\backend\log_server.py scripts\seed_practice_log.py
+          python -m py_compile scripts\generate_icon.py
+          node --check src\frontend\records.js
+
+      - name: Generate icon
+        run: python scripts\generate_icon.py
+
+      - name: Build exe
+        run: |
+          Push-Location packaging
+          pyinstaller --clean --noconfirm practice_float.spec --distpath ..\dist --workpath ..\build
+          Pop-Location
+          New-Item -ItemType Directory -Force -Path dist\GuitarPracticeMonitor\data | Out-Null
+          Move-Item -Force dist\guitar-practice-monitor.exe dist\GuitarPracticeMonitor\guitar-practice-monitor.exe
+          if (Test-Path data\practice_log.json) {
+            Copy-Item data\practice_log.json dist\GuitarPracticeMonitor\data\practice_log.json
+          } else {
+            "{}" | Set-Content -Encoding UTF8 dist\GuitarPracticeMonitor\data\practice_log.json
+          }
+
+      - name: Package Windows zip
+        run: Compress-Archive -Path dist\GuitarPracticeMonitor -DestinationPath dist\guitar-practice-monitor-windows.zip -Force
+
+      - name: Upload Windows artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: guitar-practice-monitor-windows
+          path: dist/guitar-practice-monitor-windows.zip
+
+  build-macos:
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -r requirements.txt
+          python -m pip install pyinstaller
+
+      - name: Validate sources
+        run: |
+          python -m py_compile src/desktop/practice_float.py src/backend/log_server.py scripts/seed_practice_log.py
+          python -m py_compile scripts/generate_icon.py
+          node --check src/frontend/records.js
+
+      - name: Generate macOS icon
+        run: |
+          python scripts/generate_icon.py
+          mkdir -p assets/app.iconset
+          sips -z 16 16 assets/app.png --out assets/app.iconset/icon_16x16.png
+          sips -z 32 32 assets/app.png --out assets/app.iconset/icon_16x16@2x.png
+          sips -z 32 32 assets/app.png --out assets/app.iconset/icon_32x32.png
+          sips -z 64 64 assets/app.png --out assets/app.iconset/icon_32x32@2x.png
+          sips -z 128 128 assets/app.png --out assets/app.iconset/icon_128x128.png
+          sips -z 256 256 assets/app.png --out assets/app.iconset/icon_128x128@2x.png
+          sips -z 256 256 assets/app.png --out assets/app.iconset/icon_256x256.png
+          sips -z 512 512 assets/app.png --out assets/app.iconset/icon_256x256@2x.png
+          sips -z 512 512 assets/app.png --out assets/app.iconset/icon_512x512.png
+          sips -z 1024 1024 assets/app.png --out assets/app.iconset/icon_512x512@2x.png
+          iconutil -c icns assets/app.iconset -o assets/app.icns
+
+      - name: Build app
+        run: |
+          pushd packaging
+          pyinstaller --clean --noconfirm practice_float_macos.spec --distpath ../dist --workpath ../build
+          popd
+          mkdir -p dist/GuitarPracticeMonitor-macos/data
+          mv "dist/Guitar Practice Monitor.app" dist/GuitarPracticeMonitor-macos/
+          if [ -f data/practice_log.json ]; then
+            cp data/practice_log.json dist/GuitarPracticeMonitor-macos/data/practice_log.json
+          else
+            printf "{}" > dist/GuitarPracticeMonitor-macos/data/practice_log.json
+          fi
+
+      - name: Package macOS zip
+        run: ditto -c -k --sequesterRsrc --keepParent dist/GuitarPracticeMonitor-macos dist/guitar-practice-monitor-macos.zip
+
+      - name: Upload macOS artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: guitar-practice-monitor-macos
+          path: dist/guitar-practice-monitor-macos.zip
+
+  release:
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+    needs:
+      - build-windows
+      - build-macos
+
+    steps:
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: release-artifacts
+
+      - name: Publish GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: release-artifacts/**/*.zip

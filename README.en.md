@@ -2,7 +2,7 @@
 
 [中文](README.md)
 
-Guitar Practice Monitor is a lightweight Windows practice companion for guitar players.
+Guitar Practice Monitor is a lightweight desktop practice companion for guitar players, with Windows and macOS builds.
 
 It makes daily practice less repetitive by combining a small desktop widget with a local practice log:
 
@@ -21,17 +21,27 @@ All data stays local.
 
 ## Download
 
-Download the latest Windows build from GitHub Releases:
+Download the latest build from GitHub Releases:
 
 ```text
-Releases → guitar-practice-monitor-windows.zip
+Windows → guitar-practice-monitor-windows.zip
+macOS   → guitar-practice-monitor-macos.zip
 ```
 
-The build output is a portable folder:
+The Windows build output is a portable folder:
 
 ```text
 GuitarPracticeMonitor/
   guitar-practice-monitor.exe
+  data/
+    practice_log.json
+```
+
+The macOS build contains the app bundle and local data folder:
+
+```text
+GuitarPracticeMonitor-macos/
+  Guitar Practice Monitor.app
   data/
     practice_log.json
 ```
