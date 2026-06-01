@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Guitar Practice Log</title>
+    <link rel="stylesheet" href="records.css">
+  </head>
+  <body>
+    <main class="shell">
+      <header class="hero">
+        <div>
+          <p>Practice Log</p>
+          <h1 data-i18n="title">练习记录</h1>
+        </div>
+        <div class="hero-actions">
+          <div class="language-switch" role="group" aria-label="Language">
+            <button id="langZhBtn" type="button">中文</button>
+            <button id="langEnBtn" type="button">EN</button>
+          </div>
+          <span class="save-state" id="saveState" data-i18n="saved">已保存</span>
+        </div>
+      </header>
+
+      <section class="stats">
+        <article>
+          <span data-i18n="today">今日</span>
+          <strong id="todayStat">0m</strong>
+        </article>
+        <article>
+          <span data-i18n="week">本周</span>
+          <strong id="weekStat">0m</strong>
+        </article>
+        <article>
+          <span data-i18n="month">本月</span>
+          <strong id="monthStat">0m</strong>
+        </article>
+      </section>
+
+      <section class="heatmap-panel">
+        <div class="panel-head">
+          <h2 data-i18n="heatmap">练习热力图</h2>
+          <span data-i18n="lastWeeks">最近 26 周</span>
+        </div>
+        <div class="heatmap-wrap">
+          <div class="month-labels" id="monthLabels"></div>
+          <div class="heatmap-body">
+            <div class="weekday-labels">
+              <span data-weekday="0">一</span><span></span><span data-weekday="2">三</span><span></span><span data-weekday="4">五</span><span></span><span data-weekday="6">日</span>
+            </div>
+            <div class="heatmap" id="heatmap"></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="workspace">
+        <aside>
+          <div class="side-head">
+            <h2 data-i18n="recent">最近记录</h2>
+            <div class="side-actions">
+              <button id="calendarBtn" type="button" data-i18n="calendar">日历</button>
+              <button id="todayBtn" type="button" data-i18n="todayButton">今天</button>
+            </div>
+          </div>
+          <div class="day-list" id="dayList"></div>
+        </aside>
+
+        <section class="editor">
+          <div class="editor-top">
+            <div>
+              <span data-i18n="selectedDate">当前日期</span>
+              <h2 id="selectedDate">--</h2>
+            </div>
+            <label>
+              <span data-i18n="duration">时长</span>
+              <output id="minutesOutput">0</output>
+            </label>
+          </div>
+          <textarea id="noteInput"></textarea>
+        </section>
+      </section>
+    </main>
+
+    <div class="modal" id="calendarModal" hidden>
+      <div class="calendar-card">
+        <div class="calendar-head">
+          <button id="prevMonthBtn" type="button">‹</button>
+          <h2 id="calendarTitle">--</h2>
+          <button id="nextMonthBtn" type="button">›</button>
+        </div>
+        <div class="weekdays">
+          <span data-calendar-weekday="0">一</span><span data-calendar-weekday="1">二</span><span data-calendar-weekday="2">三</span><span data-calendar-weekday="3">四</span><span data-calendar-weekday="4">五</span><span data-calendar-weekday="5">六</span><span data-calendar-weekday="6">日</span>
+        </div>
+        <div class="calendar-grid" id="calendarGrid"></div>
+      </div>
+    </div>
+    <script src="records.js"></script>
+  </body>
+</html>

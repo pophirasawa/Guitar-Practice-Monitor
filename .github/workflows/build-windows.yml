@@ -1,0 +1,64 @@
+name: Build Guitar Practice Monitor
+
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - "v*"
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -r requirements.txt
+          python -m pip install pyinstaller
+
+      - name: Validate sources
+        run: |
+          python -m py_compile src\desktop\practice_float.py src\backend\log_server.py scripts\seed_practice_log.py
+          python -m py_compile scripts\generate_icon.py
+          node --check src\frontend\records.js
+
+      - name: Generate icon
+        run: python scripts\generate_icon.py
+
+      - name: Build exe
+        run: |
+          Push-Location packaging
+          pyinstaller --clean --noconfirm practice_float.spec --distpath ..\dist --workpath ..\build
+          Pop-Location
+          New-Item -ItemType Directory -Force -Path dist\GuitarPracticeMonitor\data | Out-Null
+          Move-Item -Force dist\guitar-practice-monitor.exe dist\GuitarPracticeMonitor\guitar-practice-monitor.exe
+          if (Test-Path data\practice_log.json) {
+            Copy-Item data\practice_log.json dist\GuitarPracticeMonitor\data\practice_log.json
+          } else {
+            "{}" | Set-Content -Encoding UTF8 dist\GuitarPracticeMonitor\data\practice_log.json
+          }
+
+      - name: Package release zip
+        run: |
+          Compress-Archive -Path dist\GuitarPracticeMonitor -DestinationPath dist\guitar-practice-monitor-windows.zip -Force
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: guitar-practice-monitor-windows
+          path: dist/guitar-practice-monitor-windows.zip
+
+      - name: Publish GitHub Release
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: dist/guitar-practice-monitor-windows.zip

@@ -1,0 +1,22 @@
+# Python
+__pycache__/
+*.py[cod]
+
+# Build outputs
+build/
+dist/
+*.spec~
+
+# Local runtime data
+data/*.json
+data/.practice_log_server.json
+
+# Local environments
+.venv/
+venv/
+
+# OS/editor noise
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
