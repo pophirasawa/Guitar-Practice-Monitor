@@ -46,6 +46,16 @@ GuitarPracticeMonitor-macos/
     practice_log.json
 ```
 
+The macOS build is currently unsigned. If macOS blocks it on first launch:
+
+1. Open System Settings and go to Privacy & Security.
+2. In the Security section, click Open Anyway.
+3. If it still cannot be opened, run this in Terminal:
+
+```bash
+xattr -dr com.apple.quarantine ~/Downloads/GuitarPracticeMonitor-macos/"Guitar Practice Monitor.app"
+```
+
 ## Usage
 
 - Click `MIC` to choose an input device. After a device is selected, the status changes from `WAITING` to `PRACTICING` and practice timing starts automatically.

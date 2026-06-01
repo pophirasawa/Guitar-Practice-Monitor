@@ -46,6 +46,16 @@ GuitarPracticeMonitor-macos/
     practice_log.json
 ```
 
+macOS 构建目前未签名。如果首次打开被系统拦截：
+
+1. 打开系统设置，进入隐私与安全性。
+2. 在安全性区域点击仍要打开。
+3. 如果仍然打不开，可以在终端执行：
+
+```bash
+xattr -dr com.apple.quarantine ~/Downloads/GuitarPracticeMonitor-macos/"Guitar Practice Monitor.app"
+```
+
 ## 使用
 
 - 点击 `MIC` 选择输入设备。选择成功后状态会从 `WAITING` 变成 `PRACTICING`，并开始自动计时。
