@@ -25,7 +25,8 @@ Guitar Practice Monitor 是一个轻量的桌面吉他练习记录器，支持 W
 
 ```text
 Windows → guitar-practice-monitor-windows.zip
-macOS   → guitar-practice-monitor-macos.zip
+macOS Intel x64 → guitar-practice-monitor-macos-x64.zip
+macOS M-series arm64 → guitar-practice-monitor-macos-arm64.zip
 ```
 
 Windows 构建产物是一个可直接运行的文件夹：
@@ -37,11 +38,12 @@ GuitarPracticeMonitor/
     practice_log.json
 ```
 
-macOS 构建产物包含应用和本地数据目录：
+macOS 构建产物包含应用、本地数据目录和调试启动脚本：
 
 ```text
-GuitarPracticeMonitor-macos/
+GuitarPracticeMonitor-macos-x64/
   Guitar Practice Monitor.app
+  Launch Debug.command
   data/
     practice_log.json
 ```
@@ -53,13 +55,19 @@ macOS 构建目前未签名。如果首次打开被系统拦截：
 3. 如果仍然打不开，可以在终端执行：
 
 ```bash
-xattr -dr com.apple.quarantine ~/Downloads/GuitarPracticeMonitor-macos/"Guitar Practice Monitor.app"
+xattr -dr com.apple.quarantine ~/Downloads/GuitarPracticeMonitor-macos-x64/"Guitar Practice Monitor.app"
 ```
 
 如果应用打开后立刻退出，崩溃日志会写到：
 
 ```text
-GuitarPracticeMonitor-macos/data/crash.log
+GuitarPracticeMonitor-macos-x64/data/crash.log
+```
+
+如果没有 `crash.log`，说明可能还没跑到 Python 主程序。可以双击 `Launch Debug.command`，再查看：
+
+```text
+GuitarPracticeMonitor-macos-x64/data/terminal.log
 ```
 
 ## 使用

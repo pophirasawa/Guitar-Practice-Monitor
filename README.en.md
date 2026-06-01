@@ -25,7 +25,8 @@ Download the latest build from GitHub Releases:
 
 ```text
 Windows → guitar-practice-monitor-windows.zip
-macOS   → guitar-practice-monitor-macos.zip
+macOS Intel x64 → guitar-practice-monitor-macos-x64.zip
+macOS M-series arm64 → guitar-practice-monitor-macos-arm64.zip
 ```
 
 The Windows build output is a portable folder:
@@ -37,11 +38,12 @@ GuitarPracticeMonitor/
     practice_log.json
 ```
 
-The macOS build contains the app bundle and local data folder:
+The macOS build contains the app bundle, local data folder, and debug launcher:
 
 ```text
-GuitarPracticeMonitor-macos/
+GuitarPracticeMonitor-macos-x64/
   Guitar Practice Monitor.app
+  Launch Debug.command
   data/
     practice_log.json
 ```
@@ -53,13 +55,19 @@ The macOS build is currently unsigned. If macOS blocks it on first launch:
 3. If it still cannot be opened, run this in Terminal:
 
 ```bash
-xattr -dr com.apple.quarantine ~/Downloads/GuitarPracticeMonitor-macos/"Guitar Practice Monitor.app"
+xattr -dr com.apple.quarantine ~/Downloads/GuitarPracticeMonitor-macos-x64/"Guitar Practice Monitor.app"
 ```
 
 If the app opens and exits immediately, the crash log is written to:
 
 ```text
-GuitarPracticeMonitor-macos/data/crash.log
+GuitarPracticeMonitor-macos-x64/data/crash.log
+```
+
+If there is no `crash.log`, the app may not have reached the Python entry point. Double-click `Launch Debug.command`, then check:
+
+```text
+GuitarPracticeMonitor-macos-x64/data/terminal.log
 ```
 
 ## Usage

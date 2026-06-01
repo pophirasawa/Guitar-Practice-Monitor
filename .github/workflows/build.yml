@@ -60,7 +60,18 @@ jobs:
           path: dist/guitar-practice-monitor-windows.zip
 
   build-macos:
-    runs-on: macos-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - runner: macos-13
+            arch: x64
+            package: guitar-practice-monitor-macos-x64.zip
+          - runner: macos-latest
+            arch: arm64
+            package: guitar-practice-monitor-macos-arm64.zip
+
+    runs-on: ${{ matrix.runner }}
 
     steps:
       - name: Checkout
@@ -105,22 +116,24 @@ jobs:
           pyinstaller --clean --noconfirm practice_float_macos.spec --distpath ../dist --workpath ../build
           popd
           codesign --force --deep --sign - "dist/Guitar Practice Monitor.app"
-          mkdir -p dist/GuitarPracticeMonitor-macos/data
-          mv "dist/Guitar Practice Monitor.app" dist/GuitarPracticeMonitor-macos/
+          mkdir -p "dist/GuitarPracticeMonitor-macos-${{ matrix.arch }}/data"
+          mv "dist/Guitar Practice Monitor.app" "dist/GuitarPracticeMonitor-macos-${{ matrix.arch }}/"
           if [ -f data/practice_log.json ]; then
-            cp data/practice_log.json dist/GuitarPracticeMonitor-macos/data/practice_log.json
+            cp data/practice_log.json "dist/GuitarPracticeMonitor-macos-${{ matrix.arch }}/data/practice_log.json"
           else
-            printf "{}" > dist/GuitarPracticeMonitor-macos/data/practice_log.json
+            printf "{}" > "dist/GuitarPracticeMonitor-macos-${{ matrix.arch }}/data/practice_log.json"
           fi
+          printf '#!/bin/zsh\nDIR="${0:a:h}"\n"$DIR/Guitar Practice Monitor.app/Contents/MacOS/guitar-practice-monitor" > "$DIR/data/terminal.log" 2>&1\n' > "dist/GuitarPracticeMonitor-macos-${{ matrix.arch }}/Launch Debug.command"
+          chmod +x "dist/GuitarPracticeMonitor-macos-${{ matrix.arch }}/Launch Debug.command"
 
       - name: Package macOS zip
-        run: ditto -c -k --sequesterRsrc --keepParent dist/GuitarPracticeMonitor-macos dist/guitar-practice-monitor-macos.zip
+        run: ditto -c -k --sequesterRsrc --keepParent "dist/GuitarPracticeMonitor-macos-${{ matrix.arch }}" "dist/${{ matrix.package }}"
 
       - name: Upload macOS artifact
         uses: actions/upload-artifact@v4
         with:
-          name: guitar-practice-monitor-macos
-          path: dist/guitar-practice-monitor-macos.zip
+          name: guitar-practice-monitor-macos-${{ matrix.arch }}
+          path: dist/${{ matrix.package }}
 
   release:
     if: startsWith(github.ref, 'refs/tags/v')
