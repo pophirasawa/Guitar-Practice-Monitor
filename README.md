@@ -56,6 +56,12 @@ macOS 构建目前未签名。如果首次打开被系统拦截：
 xattr -dr com.apple.quarantine ~/Downloads/GuitarPracticeMonitor-macos/"Guitar Practice Monitor.app"
 ```
 
+如果应用打开后立刻退出，崩溃日志会写到：
+
+```text
+GuitarPracticeMonitor-macos/data/crash.log
+```
+
 ## 使用
 
 - 点击 `MIC` 选择输入设备。选择成功后状态会从 `WAITING` 变成 `PRACTICING`，并开始自动计时。

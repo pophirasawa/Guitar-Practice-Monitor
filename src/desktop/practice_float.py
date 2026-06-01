@@ -6,6 +6,7 @@ import subprocess
 import sys
 import time
 import tkinter as tk
+import traceback
 import webbrowser
 from collections import deque
 from datetime import date
@@ -53,6 +54,14 @@ DATA_ROOT = data_root()
 DATA_ROOT.mkdir(parents=True, exist_ok=True)
 LOG_PATH = DATA_ROOT / "practice_log.json"
 LOG_PORT_FILE = DATA_ROOT / ".practice_log_server.json"
+CRASH_LOG_PATH = DATA_ROOT / "crash.log"
+
+
+def write_crash_log():
+    try:
+        CRASH_LOG_PATH.write_text(traceback.format_exc(), encoding="utf-8")
+    except Exception:
+        pass
 
 
 class PracticeLog:
@@ -607,7 +616,9 @@ class PracticeFloat:
     def __init__(self):
         self.root = tk.Tk()
         self.root.title("Guitar Practice Monitor")
-        self.root.geometry(f"{WIDTH}x{HEIGHT}+1420+120")
+        screen_width = self.root.winfo_screenwidth()
+        x = max(20, min(screen_width - WIDTH - 20, 1420))
+        self.root.geometry(f"{WIDTH}x{HEIGHT}+{x}+120")
         self.root.configure(bg=BG)
         self.root.attributes("-topmost", True)
         self.root.resizable(False, False)
@@ -1035,11 +1046,15 @@ class PracticeFloat:
 
 
 if __name__ == "__main__":
-    if "--log-server" in sys.argv:
-        if not getattr(sys, "frozen", False):
-            sys.path.insert(0, str(ROOT / "src" / "backend"))
-        import log_server
+    try:
+        if "--log-server" in sys.argv:
+            if not getattr(sys, "frozen", False):
+                sys.path.insert(0, str(ROOT / "src" / "backend"))
+            import log_server
 
-        log_server.main()
-    else:
-        PracticeFloat().run()
+            log_server.main()
+        else:
+            PracticeFloat().run()
+    except Exception:
+        write_crash_log()
+        raise

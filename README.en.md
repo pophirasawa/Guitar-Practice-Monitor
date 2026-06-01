@@ -56,6 +56,12 @@ The macOS build is currently unsigned. If macOS blocks it on first launch:
 xattr -dr com.apple.quarantine ~/Downloads/GuitarPracticeMonitor-macos/"Guitar Practice Monitor.app"
 ```
 
+If the app opens and exits immediately, the crash log is written to:
+
+```text
+GuitarPracticeMonitor-macos/data/crash.log
+```
+
 ## Usage
 
 - Click `MIC` to choose an input device. After a device is selected, the status changes from `WAITING` to `PRACTICING` and practice timing starts automatically.

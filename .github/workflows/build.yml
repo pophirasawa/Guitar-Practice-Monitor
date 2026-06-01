@@ -104,6 +104,7 @@ jobs:
           pushd packaging
           pyinstaller --clean --noconfirm practice_float_macos.spec --distpath ../dist --workpath ../build
           popd
+          codesign --force --deep --sign - "dist/Guitar Practice Monitor.app"
           mkdir -p dist/GuitarPracticeMonitor-macos/data
           mv "dist/Guitar Practice Monitor.app" dist/GuitarPracticeMonitor-macos/
           if [ -f data/practice_log.json ]; then
