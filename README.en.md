@@ -25,7 +25,6 @@ Download the latest build from GitHub Releases:
 
 ```text
 Windows → guitar-practice-monitor-windows.zip
-macOS Intel x64 → guitar-practice-monitor-macos-x64.zip
 macOS M-series arm64 → guitar-practice-monitor-macos-arm64.zip
 ```
 
@@ -41,7 +40,7 @@ GuitarPracticeMonitor/
 The macOS build contains the app bundle, local data folder, and debug launcher:
 
 ```text
-GuitarPracticeMonitor-macos-x64/
+GuitarPracticeMonitor-macos-arm64/
   Guitar Practice Monitor.app
   Launch Debug.command
   data/
@@ -61,13 +60,13 @@ xattr -dr com.apple.quarantine ~/Downloads/GuitarPracticeMonitor-macos-arm64
 If the app opens and exits immediately, the crash log is written to:
 
 ```text
-GuitarPracticeMonitor-macos-x64/data/crash.log
+GuitarPracticeMonitor-macos-arm64/data/crash.log
 ```
 
 If there is no `crash.log`, the app may not have reached the Python entry point. Double-click `Launch Debug.command`, then check:
 
 ```text
-GuitarPracticeMonitor-macos-x64/data/terminal.log
+GuitarPracticeMonitor-macos-arm64/data/terminal.log
 ```
 
 ## Usage
