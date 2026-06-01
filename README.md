@@ -1,33 +1,33 @@
 # Guitar Practice Monitor
 
-[中文](README.zh-CN.md)
+[English](README.en.md)
 
-Guitar Practice Monitor is a lightweight Windows practice companion for guitar players.
+Guitar Practice Monitor 是一个轻量的 Windows 吉他练习记录器。
 
-It makes daily practice less repetitive by combining a small desktop widget with a local practice log:
+它把桌面浮窗和本地练习记录结合起来，让日常练琴没那么枯燥：
 
-- live input visualization
-- real-time chord display
-- simple metronome
-- automatic practice timing after selecting an input device
-- local web dashboard for daily, weekly, and monthly records
-- notes for riffs, rhythm parts, solo sections, technique work, tone settings, and speed practice
+- 实时输入可视化
+- 实时和弦显示
+- 简单节拍器
+- 选择输入设备后自动记录练习时长
+- 本地 Web 面板查看每日、每周、每月记录
+- 记录 riff、节奏型、solo 段落、技巧练习、音色设置、速度训练等内容
 
-All data stays local.
+所有数据都保存在本地。
 
-## Screenshot
+## 截图
 
-![Guitar Practice Monitor screenshot](docs/screenshot.png)
+![Guitar Practice Monitor 截图](docs/screenshot.png)
 
-## Download
+## 下载
 
-Download the latest Windows build from GitHub Releases:
+在 GitHub Releases 下载最新版 Windows 构建：
 
 ```text
 Releases → guitar-practice-monitor-windows.zip
 ```
 
-The build output is a portable folder:
+构建产物是一个可直接运行的文件夹：
 
 ```text
 GuitarPracticeMonitor/
@@ -36,9 +36,9 @@ GuitarPracticeMonitor/
     practice_log.json
 ```
 
-## Data
+## 数据
 
-Practice records are stored in the bundle folder:
+练习记录保存在程序文件夹内：
 
 ```text
 data/practice_log.json
