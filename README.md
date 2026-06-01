@@ -55,7 +55,7 @@ macOS 构建目前未签名。如果首次打开被系统拦截：
 3. 如果仍然打不开，可以在终端执行：
 
 ```bash
-xattr -dr com.apple.quarantine ~/Downloads/GuitarPracticeMonitor-macos-x64/"Guitar Practice Monitor.app"
+xattr -dr com.apple.quarantine ~/Downloads/GuitarPracticeMonitor-macos-arm64
 ```
 
 如果应用打开后立刻退出，崩溃日志会写到：

@@ -55,7 +55,7 @@ The macOS build is currently unsigned. If macOS blocks it on first launch:
 3. If it still cannot be opened, run this in Terminal:
 
 ```bash
-xattr -dr com.apple.quarantine ~/Downloads/GuitarPracticeMonitor-macos-x64/"Guitar Practice Monitor.app"
+xattr -dr com.apple.quarantine ~/Downloads/GuitarPracticeMonitor-macos-arm64
 ```
 
 If the app opens and exits immediately, the crash log is written to:

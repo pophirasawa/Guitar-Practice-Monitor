@@ -33,6 +33,9 @@ GREEN = "#47f0a0"
 CYAN = "#55d7ff"
 AMBER = "#ffd166"
 RED = "#ff6565"
+IS_MAC = sys.platform == "darwin"
+
+
 def resource_root():
     if getattr(sys, "frozen", False) and hasattr(sys, "_MEIPASS"):
         return Path(sys._MEIPASS)
@@ -622,7 +625,8 @@ class PracticeFloat:
         self.root.configure(bg=BG)
         self.root.attributes("-topmost", True)
         self.root.resizable(False, False)
-        self.root.overrideredirect(True)
+        if not IS_MAC:
+            self.root.overrideredirect(True)
 
         self.mic = AudioProbe("mic")
         self.mic_bars = [0.0] * 48
