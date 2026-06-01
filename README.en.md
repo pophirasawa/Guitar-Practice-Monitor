@@ -46,6 +46,13 @@ GuitarPracticeMonitor-macos/
     practice_log.json
 ```
 
+## Usage
+
+- Click `MIC` to choose an input device. After a device is selected, the status changes from `WAITING` to `PRACTICING` and practice timing starts automatically.
+- Click `LOG` to open the practice log page, where you can view daily, weekly, and monthly stats and edit practice notes for each day.
+- Click the metronome button to turn the metronome on or off. Type a BPM value directly to change the tempo.
+- When the floating window is closed, the current practice duration is saved to today's record.
+
 ## Data
 
 Practice records are stored in the bundle folder:
